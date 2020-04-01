@@ -61,10 +61,10 @@ class Exchange extends Component{
             <div className="card card-body my-3 mx-3" >
                 
                     <div className="input-group">
-                        {crypto.name}<br></br>
-                        {crypto.trade_volume_24h_btc_normalized}<br></br>
-                        {crypto.year_established}<br></br>
-                        {crypto.country}<br></br>
+                        Name:{crypto.name}<br></br>
+                        Volume{crypto.trade_volume_24h_btc_normalized}<br></br>
+                        Year:{crypto.year_established}<br></br>
+                        Country:{crypto.country}<br></br>
                     </div>
                     
             </div>

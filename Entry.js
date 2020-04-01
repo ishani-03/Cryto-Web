@@ -68,10 +68,10 @@ class Entry extends Component{
             <div className="card card-body my-3 mx-3" >
                 
                     <div className="input-group">
-                        {this.state.clickData.id}<br></br>
+                        Id:{this.state.clickData.id}<br></br>
                         {/* <img src={this.state.clickData.thumb}  alt="symbol"/> */}
-                        {this.state.clickData.name}<br></br>
-                        {this.state.clickData.symbol}<br></br>
+                        Name:{this.state.clickData.name}<br></br>
+                        Symbol:{this.state.clickData.symbol}<br></br>
                         {this.state.clickData.usd}<br></br>                        
                     </div>
             </div>
