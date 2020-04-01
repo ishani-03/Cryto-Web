@@ -40,6 +40,18 @@ class Exchange extends Component{
             this.setState({cryptos:info_ex.data , loading:false})
     }
 
+    search(key){
+        console.log(key);
+        fetch("https://api.coingecko.com/api/v3/exchanges/list?q="+key)
+        .then((data)=>{
+            data.json().then((resp)=>{
+                console.warn("resp:",resp)
+                this.setState({searchData:resp})
+            }) 
+        })
+    
+    }
+    
     clickMe(crypto){
         
         // alert(crypto.id);
@@ -101,7 +113,8 @@ class Exchange extends Component{
                 <h2 className="text-capitalize text-center my=12">Exchanges</h2>
                 <div className="float-right p-2">
                 <Form inline>
-                <input type="text" placeholder="Search" className="mr-sm-2"/>
+                <input type="text" placeholder="Search" className="mr-sm-2" 
+                onChange={(event)=>this.search(event.target.value)}/>
                 <Button >Search</Button>
                 </Form>
                 </div>

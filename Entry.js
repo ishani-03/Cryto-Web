@@ -42,6 +42,17 @@ class Entry extends Component{
         
     }
 
+    search(key){
+        console.log(key);
+        fetch("https://api.coingecko.com/api/v3/coins/list?q="+key)
+        .then((data)=>{
+            data.json().then((resp)=>{
+                console.warn("resp:",resp)
+                this.setState({searchData:resp})
+            }) 
+        })
+    
+    }
     async fetchData(){
         
         let info = await CoinGeckoClient.coins.all();
@@ -58,6 +69,7 @@ class Entry extends Component{
                 
                     <div className="input-group">
                         {this.state.clickData.id}<br></br>
+                        {/* <img src={this.state.clickData.thumb}  alt="symbol"/> */}
                         {this.state.clickData.name}<br></br>
                         {this.state.clickData.symbol}<br></br>
                         {this.state.clickData.usd}<br></br>                        
@@ -122,7 +134,7 @@ class Entry extends Component{
                 <div className="float-right p-2">
                 <Form inline>
                 <input type="text" placeholder="Search" className="mr-sm-2" 
-                onChange={this.handleChange}/>
+                onChange={(event)=>this.search(event.target.value)}/>
                 <Button >Search</Button>
                 </Form>
                 </div>
