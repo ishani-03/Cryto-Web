@@ -1,8 +1,10 @@
 import React , {Component} from  'react'
 import {Table} from 'reactstrap'
 import Loading from './loading.gif';
+import style from './style.css'
 import {Navbar,Nav,NavDropdown,Form,FormControl,Button} from 'react-bootstrap'
-//import axios from 'axios'
+import ReactDOM from 'react-dom'
+
 
 const CoinGecko = require('coingecko-api');
 const CoinGeckoClient = new CoinGecko();
@@ -11,30 +13,59 @@ class Exchange extends Component{
 
     state={
         loading:true,
-        cryptos:[]
+        cryptos:[],
+        clickData:[],
     };
     
-    async componentDidMount(){
-        
-            let info_ex = await CoinGeckoClient.exchanges.all();;
-            //const result= await info.json();
-            console.log(info_ex);
-            this.setState({cryptos:info_ex.data , loading:false})
-
-            // this.setState({data:data});
-
-            // const url="https://api.coingecko.com/api/v3/exchanges"
-            // const response= await fetch(url);
-            // const info_ex = await response.json();
-            // console.log(info_ex);
-    
-          
+    componentWillMount(){
+        localStorage.getItem('Exchanges') && this.setState({
+            cryptos:JSON.parse(localStorage.getItem('Exchanges')),
+            loading:false
+        })
     }
 
-    changeText(currentText) {
-        this.setState({currentText});
-        console.log({currentText});
-      }
+     componentDidMount(){
+         if(!localStorage.getItem('Exchanges')){
+            this.fetchDataEx()
+         }
+         else{
+            console.log('data from local storage!')
+         }
+        
+        
+    }
+    async fetchDataEx(){
+            let info_ex = await CoinGeckoClient.exchanges.all();
+            console.log(info_ex);
+            this.setState({cryptos:info_ex.data , loading:false})
+    }
+
+    clickMe(crypto){
+        
+        // alert(crypto.id);
+        console.log(crypto);
+        this.setState({clickData:crypto})
+        const htm=(
+            <div className="card card-body my-3 mx-3" >
+                
+                    <div className="input-group">
+                        {crypto.name}<br></br>
+                        {crypto.trade_volume_24h_btc_normalized}<br></br>
+                        {crypto.year_established}<br></br>
+                        {crypto.country}<br></br>
+                    </div>
+                    
+            </div>
+        )
+        ReactDOM.render(htm, document.getElementById('tab'));
+    }
+    
+    componentWillUpdate(nextProps,nextState){
+        localStorage.setItem('Exchanges',JSON.stringify(nextState.cryptos));
+        localStorage.setItem('Date',Date.now());
+    }
+
+
     render(){
 
         if(this.state.loading){
@@ -52,27 +83,42 @@ class Exchange extends Component{
                         .map((crypto) => (
                             <tr key={crypto.id}>
                                     
-                                    <td>{crypto.symbol}<img src={crypto.image} className="mx-auto d-block" height="25px" width="25px" alt="symbol"/></td>
-                                    <td>{crypto.name}</td>
-                                    <td>{crypto.trade_volume_24h_btc_normalized}</td>
-                                    <td>{crypto.year_established}</td>
-                                    <td>{crypto.country}</td>
+                                    <td ><a onClick={this.clickMe.bind(this,crypto)} className="point">{crypto.symbol}
+                                    <img src={crypto.image} className="mx-auto d-block" height="25px" width="25px" alt="symbol"/></a></td>
+                                    <td ><a onClick={this.clickMe.bind(this,crypto)} className="point">{crypto.name}</a></td>
+                                    <td ><a onClick={this.clickMe.bind(this,crypto)} className="point">{crypto.trade_volume_24h_btc_normalized}</a></td>
+                                    <td ><a onClick={this.clickMe.bind(this,crypto)} className="point">{crypto.year_established}</a></td>
+                                    <td ><a onClick={this.clickMe.bind(this,crypto)} className="point">{crypto.country}</a></td>
                                     
                             </tr>
+                            
 
                         )
-                            // <div key={crypto.id}> {crypto.name} {crypto.id}{crypto.total_volume}</div>
-                        );
+                      );
 
         return(
             <div>
-                <h2 className="text-capitalize text-center my=12">Exchange List</h2>
+                <h2 className="text-capitalize text-center my=12">Exchanges</h2>
                 <div className="float-right p-2">
                 <Form inline>
-                <input type="text" placeholder="Search" className="mr-sm-2" onChange={this.changeText.bind(this, 'currentText')}/>
-                <Button onClick={this.changeText.bind(this, 'currentText')}>Search</Button>
+                <input type="text" placeholder="Search" className="mr-sm-2"/>
+                <Button >Search</Button>
                 </Form>
                 </div>
+                <p id="tab">
+                {/* <div className="card card-body my-3 mx-3" >
+                
+                    <div className="input-group">
+                        {this.state.clickData.name}<br></br>
+                        {this.state.clickData.trade_volume_24h_btc_normalized}<br></br>
+                        {this.state.clickData.year_established}<br></br>
+                        {this.state.clickData.country}<br></br>
+                        
+                        
+                    </div>
+                    
+            </div> */}
+            </p>
                  <Table striped bordered hover>
                         <thead>
                             <tr className="text-center">
@@ -90,6 +136,8 @@ class Exchange extends Component{
             </div>
         )
     }
+
+    
 }
 
 export default Exchange

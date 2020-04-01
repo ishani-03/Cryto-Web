@@ -3,27 +3,25 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import Exchange from './components/Exchange';
 import Entry from './components/Entry';
-//import TestEntry from './components/TestEntry';
+import NavBar from './components/NavBar';
 import {Route , Link} from 'react-router-dom';
 
+function App(){
+  return(
+    <div>
+       <NavBar/>
+       <Route excat path="/entry" component={Entry}/>
+       <Route excat path="/exchange" component={Exchange}/>
+       <h1></h1>
 
-
-class App extends Component{
-  render(){
-    
-    return(
-      <div>
         
-       <Route excat path="/" component={Entry}/>
-        <Route excat path="/exchange" component={Exchange}/>
-        
-         <Entry></Entry> 
-         <Exchange></Exchange> 
+         {/* <Entry></Entry>  */}
+         {/* <Exchange></Exchange>  */}
         {/* <TestEntry/> */}
+        {/* <DisplayEntry></DisplayEntry> */}
         
       </div>
-    )
-  }
+  )
 }
 
-export default App
+export default App;
